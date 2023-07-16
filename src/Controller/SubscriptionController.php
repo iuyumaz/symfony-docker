@@ -20,7 +20,7 @@ class SubscriptionController extends AbstractController
      * @throws ValidationException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    #[Route('/api/subscription-check', name: 'app_subscription', methods: 'POST')]
+    #[Route('/api/subscription-check', name: 'app_subscription')]
     public function check(Request $request, SubscriptionService $subscriptionService, ValidationService $validationService): JsonResponse
     {
         $response = $subscriptionService->getSubscriptionByClientToken($this->getClientTokenFromHeader($request));
