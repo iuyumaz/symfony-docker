@@ -6,7 +6,9 @@ use App\Exception\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationException;
 
 class ExceptionListener
 {
@@ -29,7 +31,11 @@ class ExceptionListener
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             $errorMessage = $exception->getMessage();
             $errors = $exception->getErrors();
+        } else if ($exception instanceof HttpException) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $errorMessage = $exception->getMessage();
         } else {
+//            var_dump(get_class($exception));
 //            var_dump($exception->getFile());
 //            var_dump($exception->getLine());
 //            var_dump($exception->getMessage());

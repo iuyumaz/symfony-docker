@@ -7,13 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherAwareInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: DeviceRepository::class)]
 #[ORM\Index(columns: ["uid", "application_id"], name: "search_uid_index")]
 #[ORM\Index(columns: ["client_token"], name: "search_client_token_index")]
 #[ORM\UniqueConstraint(name: 'uid_app_id_unique', columns: ['uid', 'application_id'])]
 #[ORM\HasLifecycleCallbacks]
-class Device
+class Device implements PasswordHasherAwareInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -162,8 +164,6 @@ class Device
     {
         $this->setCreatedAt(new \DateTime(date('Y-m-d H:i:s')));
         $this->setUpdatedAt(new \DateTime(date('Y-m-d H:i:s')));
-        $this->setClientToken(md5($this->getUid() . $this->getApplication()->getId()));
-
     }
 
     #[ORM\PreUpdate]
@@ -200,5 +200,28 @@ class Device
         }
 
         return $this;
+    }
+
+    public function getPasswordHasherName(): ?string
+    {
+        return null;
+        // TODO: Implement getPasswordHasherName() method.
+    }
+
+    public function getRoles(): array
+    {
+        return [];
+        // TODO: Implement getRoles() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return '';
+        // TODO: Implement getUserIdentifier() method.
     }
 }

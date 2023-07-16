@@ -6,11 +6,12 @@ use App\Entity\Device;
 use App\Repository\DeviceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 class DeviceService extends AbstractService
 {
 
-    public function __construct(protected ManagerRegistry $managerRegistry, protected ApplicationService $applicationService)
+    public function __construct(protected ManagerRegistry $managerRegistry, protected ApplicationService $applicationService, protected PasswordHasherFactoryInterface $passwordHasherFactory)
     {
     }
 
@@ -82,10 +83,12 @@ class DeviceService extends AbstractService
     {
         // TODO tokeni JWT ile hazırlayıp verirsek daha güzel olur.
         $device = new Device();
+        $application = $this->applicationService->getAppById($contentData['application']['id']);
         $device->setUid($contentData['uid']);
-        $device->setApplication($this->applicationService->getAppById($contentData['application']['id']));
+        $device->setApplication($application);
         $device->setLanguage($contentData['language']);
         $device->setOperatingSystem($contentData['operatingSystem']);
+        $device->setClientToken($this->passwordHasherFactory->getPasswordHasher($device)->hash($contentData['uid'] . $application->getId()));
         $manager->persist($device);
         $manager->flush();
         $this->getRedisClient()->set('device_uid_app_id' . $contentData['uid'] . '_' . $contentData['application']['id'], $device->getClientToken());

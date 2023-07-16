@@ -7,7 +7,6 @@ use App\Entity\Subscription;
 use App\Exception\ValidationException;
 use App\Service\SubscriptionService;
 use App\Service\Validation\ValidationService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,13 +24,7 @@ class SubscriptionController extends AbstractController
     #[Route('/api/subscription-check', name: 'app_subscription', methods: 'POST')]
     public function check(Request $request, SubscriptionService $subscriptionService, ValidationService $validationService): JsonResponse
     {
-        $contentData = json_decode($request->getContent(), true);
-        $errors = $validationService->validate($contentData, SubscriptionConstraints::verifyCheck());
-        if (count($errors) > 0) {
-            throw new ValidationException(message: 'Validation Exception', errors: $errors);
-        }
-        $contentData = json_decode($request->getContent(), true);
-        $response = $subscriptionService->getSubscriptionByClientToken($contentData['clientToken']);
+        $response = $subscriptionService->getSubscriptionByClientToken($this->getClientTokenFromHeader($request));
         return $this->json(json_decode($response, true));
     }
 

@@ -8,7 +8,6 @@ use App\Service\SubscriptionService;
 use App\Service\Validation\ValidationService;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +27,7 @@ class PurchaseController extends AbstractController
         if (count($errors) > 0) {
             throw new ValidationException(message: 'Validation Exception', errors: $errors);
         }
+        $contentData['clientToken'] = $this->getClientTokenFromHeader($request);
         $response = $subscriptionService->subscribe($contentData);
         return $this->json(json_decode($response, true));
     }

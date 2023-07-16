@@ -16,9 +16,6 @@ class PurchaseConstraints
     public static function verify(): Assert\Collection
     {
         return new Assert\Collection([
-            'clientToken' => new Assert\Required([
-                new Assert\NotBlank()
-            ]),
             'receipt' => new Assert\Required([
                 new Assert\NotBlank()
             ])

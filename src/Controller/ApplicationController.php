@@ -7,7 +7,6 @@ use App\Entity\Application;
 use App\Exception\ValidationException;
 use App\Service\ApplicationService;
 use App\Service\Validation\ValidationService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
