@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Exception\ValidationException;
 use App\Service\CacheService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;

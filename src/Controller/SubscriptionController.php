@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Constraints\SubscriptionConstraints;
-use App\Entity\Subscription;
 use App\Exception\ValidationException;
 use App\Service\SubscriptionService;
 use App\Service\Validation\ValidationService;
