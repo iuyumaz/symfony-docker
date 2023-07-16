@@ -17,11 +17,10 @@ class DeviceService extends AbstractService
 
     /**
      * @param $contentData
-     * @return bool|mixed|\Redis|string|null
+     * @return string
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \RedisException
      */
-    public function register($contentData)
+    public function register($contentData): string
     {
         $redisClient = $this->getRedisClient();
         if ($redisClient->get('device_uid_app_id' . $contentData['uid'] . '_' . $contentData['application']['id'])) {
@@ -59,7 +58,6 @@ class DeviceService extends AbstractService
      * @param $contentData
      * @return bool|string|null
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \RedisException
      */
     protected function getDeviceClientToken($manager, $contentData): bool|string|null
     {
@@ -77,7 +75,6 @@ class DeviceService extends AbstractService
      * @param $manager
      * @param $contentData
      * @return Device
-     * @throws \RedisException
      */
     protected function insertNewDevice($manager, $contentData): Device
     {
